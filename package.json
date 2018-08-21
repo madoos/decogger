@@ -1,0 +1,77 @@
+{
+  "name": "campusapp-campusapp-logger-artifact",
+  "version": "0.1.0-rc",
+  "description": "Logger based on proxy to decouple log of methods",
+  "engines": {
+    "node": ">8.0.0"
+  },
+  "main": "index.js",
+  "scripts": {
+    "test": "jest --coverage --verbose",
+    "test:coverage": "npm test",
+    "test:continuos": "jest --watchAll",
+    "prepublishOnly": "nsp check",
+    "pretest": "eslint .",
+    "precommit": "lint-staged",
+    "commitmsg": "commitlint -e $GIT_PARAMS",
+    "changelog": "conventional-changelog -p eslint -i CHANGELOG.md -s -r 0 && git add CHANGELOG.md",
+    "serve:coverage": "http-server coverage/ -o"
+  },
+  "files": [
+    "lib",
+    "index.js"
+  ],
+  "jest": {
+    "coverageDirectory": "./coverage",
+    "collectCoverageFrom": [
+      "lib/**/*.{js}"
+    ],
+    "coverageReporters": [
+      "json",
+      "lcov",
+      "cobertura",
+      "text"
+    ],
+    "testEnvironment": "node"
+  },
+  "devDependencies": {
+    "artillery": "^1.6.0-22",
+    "eslint": "^5.4.0",
+    "eslint-config-standard": "^11.0.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-node": "^7.0.1",
+    "eslint-plugin-promise": "^4.0.0",
+    "eslint-plugin-standard": "^3.1.0",
+    "jest": "^23.5.0",
+    "nodemon": "^1.18.3",
+    "supertest": "^3.1.0",
+    "@commitlint/cli": "^7.0.0",
+    "@commitlint/config-conventional": "^7.0.1",
+    "conventional-changelog-cli": "^2.0.1",
+    "eslint-config-prettier": "^3.0.1",
+    "eslint-plugin-prettier": "^2.6.2",
+    "prettier-eslint-cli": "^4.7.1",
+    "http-server": "^0.11.1",
+    "lint-staged": "^7.2.2",
+    "nsp": "^3.2.1",
+    "husky": "^0.14.3"
+  },
+  "author": {
+    "name": "kairos DS",
+    "email": "campus-app@kairosds.com",
+    "url": "https://www.kairosds.com/"
+  },
+  "license": "ISC",
+  "homepage": "https://www.kairosds.com/",
+  "lint-staged": {
+    "*.js": [
+      "prettier-eslint --single-quote --bracket-spacing true --print-width 80 --semi --write",
+      "eslint",
+      "git add"
+    ],
+    "*.json": [
+      "prettier --write",
+      "git add"
+    ]
+  }
+}
