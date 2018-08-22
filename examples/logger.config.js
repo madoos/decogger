@@ -32,7 +32,7 @@ module.exports = {
                     methodName.includes('_') &&
                     typeof method === 'function' &&
                     typeof obj === 'object'
-                )
+                ) // or use an array ['methodNAme']
             },
             logger : log => console.log('specific log for POJOs', log)
         },

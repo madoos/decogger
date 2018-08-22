@@ -25,6 +25,7 @@ const main = async () => {
         g     : await deepAsyncDouble(2),
         // no apply logs for:
         h     : await bCustomString.asyncDoubleInstance(),
+        i     : numberUtils._privatePlus(2),
         // handle all errors
         error : new Error('error example')
     }
