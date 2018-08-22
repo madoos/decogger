@@ -27,6 +27,13 @@ module.exports = {
             tag    : 'module.pojo',
             io     : true,
             time   : true,
+            omit   : (methodName, method, obj) => {
+                return (
+                    methodName.includes('_') &&
+                    typeof method === 'function' &&
+                    typeof obj === 'object'
+                )
+            },
             logger : log => console.log('specific log for POJOs', log)
         },
 

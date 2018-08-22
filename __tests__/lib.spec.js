@@ -223,7 +223,9 @@ describe('Lib internal test', () => {
         process.emit('uncaughtRejection', new Error(EXPECTED_MESSAGE))
     })
 
-    test('.applyLogsForObject should apply log for each function in object without context', () => {
+    test('.applyLogsForObject should apply log for each function in object without context', done => {
+        let times = 0
+
         const obj = {
             prop   : 'foo',
             double : x => x * 2,
@@ -231,29 +233,26 @@ describe('Lib internal test', () => {
         }
 
         const config = {
-            io   : true,
-            time : true
-        }
-
-        config.logger = log => {
-            expect(log.output).toEqual(4)
-            expect(log.function).toEqual('double')
+            io     : true,
+            time   : true,
+            logger : log => {
+                expect(log.output).toEqual(4)
+                if (++times == 2) {
+                    done()
+                }
+            }
         }
 
         const objTraced = lib.applyLogsForObject(obj, config)
         expect(objTraced).toHaveProperty('prop')
 
         objTraced.double(2)
-
-        config.logger = log => {
-            expect(log.output).toEqual(2)
-            expect(log.function).toEqual('plus')
-        }
-
-        objTraced.plus(1)
+        objTraced.plus(3)
     })
 
-    test('.applyLogsForObject should apply log for each function in object with context', () => {
+    test('.applyLogsForObject should apply log for each function in object with context', done => {
+        let times = 0
+
         const obj = {
             TWO    : 2,
             double : function(x) {
@@ -266,13 +265,14 @@ describe('Lib internal test', () => {
         }
 
         const config = {
-            io   : true,
-            time : true
-        }
-
-        config.logger = log => {
-            expect(log.output).toEqual(4)
-            expect(log.function).toEqual('double')
+            io     : true,
+            time   : true,
+            logger : log => {
+                expect(log.output).toEqual(4)
+                if (++times === 2) {
+                    done()
+                }
+            }
         }
 
         const objTraced = lib.applyLogsForObject(obj, config)
@@ -281,13 +281,7 @@ describe('Lib internal test', () => {
         expect(objTraced).toHaveProperty('TWO')
 
         objTraced.double(2)
-
-        config.logger = log => {
-            expect(log.output).toEqual(2)
-            expect(log.function).toEqual('plus')
-        }
-
-        objTraced.plus(1)
+        objTraced.plus(3)
     })
 
     test('.applyLogsForConstructor should apply logs for static methods and prototype methods', done => {
