@@ -37,6 +37,15 @@ module.exports = {
             time   : true,
             logger : log =>
                 console.log('specific log instance of CustomString', log)
+        },
+
+        {
+            module : require('./modules/deepModule'),
+            tag    : 'module.deep.module.async.double',
+            io     : true,
+            time   : true,
+            logger : log =>
+                console.log('specific log for deep async double', log)
         }
     ]
 }

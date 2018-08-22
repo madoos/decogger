@@ -10,6 +10,7 @@ const numberUtils = require('./modules/pojo')
 const CustomString = require('./modules/CustomString')
 const customString = require('./modules/instance')
 const bCustomString = new CustomString('B')
+const deepAsyncDouble = require('./modules/deepDouble')
 
 const main = async () => {
     const customNumber = new CustomNumber(2)
@@ -21,8 +22,9 @@ const main = async () => {
         d : await customNumber.asyncDoubleInstance(),
         e : await numberUtils.asyncDouble(2),
         f : await customString.asyncDoubleInstance(),
+        g : await deepAsyncDouble(2),
         // np apply logs for:
-        g : await bCustomString.asyncDoubleInstance()
+        h : await bCustomString.asyncDoubleInstance()
     }
 
     return examples
