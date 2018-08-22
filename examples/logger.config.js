@@ -14,13 +14,15 @@ module.exports = {
             tag           : 'module.CustomNumber',
             io            : true,
             time          : true,
-            isConstructor : true
+            isConstructor : true,
+            omit          : false
         },
         {
             module : require('./modules/function'),
             tag    : 'module.function',
             io     : true,
-            time   : true
+            time   : true,
+            omit   : false
         },
         {
             module : require('./modules/pojo'),

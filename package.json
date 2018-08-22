@@ -1,6 +1,6 @@
 {
-  "name": "campusapp-campusapp-logger-artifact",
-  "version": "0.1.0-rc",
+  "name": "decogger",
+  "version": "1.0.0",
   "description": "Logger based on proxy to decouple log of methods",
   "engines": {
     "node": ">8.0.0"
