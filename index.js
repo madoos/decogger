@@ -17,7 +17,7 @@ const applyLogs = options => {
         traceErrorsWith(logger)
     }
 
-    Module.prototype.require = wrapRequire(config, originalRequire)
+    Module.prototype.require = wrapRequire(originalRequire, config)
 }
 
 module.exports = applyLogs

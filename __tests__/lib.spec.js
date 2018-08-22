@@ -7,11 +7,22 @@ describe('Lib internal test', () => {
         test(`.tap should return function with '${
             isObject(param) ? JSON.stringify(param) : param
         }' input`, done => {
-            const applyDone = lib.tap(() => setTimeout(done, 250))
+            const applyDone = lib.tap(() => setTimeout(done, 20))
             expect(applyDone).toBeInstanceOf(Function)
             const data = applyDone(param)
             expect(data).toEqual(param)
         })
+    })
+
+    test('.clone should clone objects', () => {
+        const obj = {
+            a : 'a',
+            b : R.identity,
+            c : []
+        }
+
+        expect(lib.clone(null)).toEqual(null)
+        expect(lib.clone(obj)).toEqual(obj)
     })
 
     test('.isFunction should return a boolean', () => {
@@ -162,11 +173,11 @@ describe('Lib internal test', () => {
             logger : log => {
                 expect(log.output).toEqual(4)
                 expect(log.function).toEqual('double')
-                setTimeout(done, 250)
+                setTimeout(done, 20)
             }
         }
 
-        const fn = lib.applyLogsForFunction(config, double)
+        const fn = lib.applyLogsForFunction(double, config)
         expect(fn).toBeInstanceOf(Function)
         const result = fn(2)
         expect(result).toEqual(4)
@@ -185,11 +196,11 @@ describe('Lib internal test', () => {
             logger : log => {
                 expect(log.output).toEqual(4)
                 expect(log.function).toEqual('double')
-                setTimeout(done, 250)
+                setTimeout(done, 20)
             }
         }
 
-        context.double = lib.applyLogsForFunction(config, context.double)
+        context.double = lib.applyLogsForFunction(context.double, config)
 
         expect(context.double).toBeInstanceOf(Function)
         const result = context.double(2)
@@ -226,7 +237,7 @@ describe('Lib internal test', () => {
             expect(log.function).toEqual('double')
         }
 
-        const objTraced = lib.applyLogsForObject(config, obj)
+        const objTraced = lib.applyLogsForObject(obj, config)
         expect(objTraced).toHaveProperty('prop')
 
         objTraced.double(2)
@@ -261,7 +272,7 @@ describe('Lib internal test', () => {
             expect(log.function).toEqual('double')
         }
 
-        const objTraced = lib.applyLogsForObject(config, obj)
+        const objTraced = lib.applyLogsForObject(obj, config)
 
         expect(objTraced).toHaveProperty('ONE')
         expect(objTraced).toHaveProperty('TWO')
@@ -276,7 +287,7 @@ describe('Lib internal test', () => {
         objTraced.plus(1)
     })
 
-    test('.applyLogsForClass should apply logs for static methods and prototype methods', done => {
+    test('.applyLogsForConstructor should apply logs for static methods and prototype methods', done => {
         class Test {
             constructor(x) {
                 this.two = x
@@ -307,12 +318,49 @@ describe('Lib internal test', () => {
             }
         }
 
-        lib.applyLogsForConstructor(config, Test)
+        lib.applyLogsForConstructor(Test, config)
 
         expect(Test).toEqual(Test)
         Test.double(2)
         const test = new Test(2)
         test.double(2)
+    })
+
+    test('.applyLogsForInstances should apply logs for instances without modifying the class', done => {
+        class Test {
+            constructor() {
+                this.two = 2
+            }
+
+            static double(x) {
+                return x * 2
+            }
+
+            double(x) {
+                return x * this.two
+            }
+        }
+
+        let times = 0
+
+        const config = {
+            io     : true,
+            time   : true,
+            logger : log => {
+                expect(log.output).toEqual(6)
+                if (++times === 2) {
+                    setTimeout(done, 20)
+                }
+            }
+        }
+
+        const instance = new Test()
+        const instanceWithLogs = lib.applyLogsForInstances(instance, config)
+        expect(instanceWithLogs).toEqual(instance)
+        const otherInstance = new Test()
+        expect(otherInstance.double(1)).toEqual(2)
+        times++
+        expect(instanceWithLogs.double(3)).toEqual(6)
     })
 
     test('.applyTraces should apply logs for sync function', done => {
@@ -324,7 +372,7 @@ describe('Lib internal test', () => {
             logger(log) {
                 expect(log.function).toEqual('double')
                 expect(log.output).toEqual(8)
-                setTimeout(done, 250)
+                setTimeout(done, 20)
             }
         })
 
@@ -341,7 +389,7 @@ describe('Lib internal test', () => {
             logger(log) {
                 expect(log.function).toEqual('double')
                 expect(log.output).toEqual(2)
-                setTimeout(done, 250)
+                setTimeout(done, 20)
             }
         })
 
@@ -378,7 +426,7 @@ describe('Lib internal test', () => {
             logger(log) {
                 expect(log.output).toEqual(2)
                 if (++times === 4) {
-                    setTimeout(done, 250)
+                    setTimeout(done, 20)
                 }
             }
         })
@@ -411,13 +459,13 @@ describe('Lib internal test', () => {
         expect(lib.applyTraces(undefined, config)).toEqual(undefined)
     })
 
-    test.only('.applyTraces should apply logs for POJOs', done => {
+    test('.applyTraces should apply logs for POJOs', done => {
         const config = {
             io     : true,
             time   : true,
             logger : log => {
                 expect(log.output).toEqual(4)
-                setTimeout(done, 250)
+                setTimeout(done, 20)
             }
         }
 
@@ -426,5 +474,130 @@ describe('Lib internal test', () => {
         expect(obj).toEqual(objWithLogs)
         const result = objWithLogs.double(2)
         expect(result).toEqual(4)
+    })
+
+    test('.applyTraces should apply logs for instances without modifying the class', done => {
+        class Test {
+            constructor() {
+                this.two = 2
+            }
+
+            static double(x) {
+                return x * 2
+            }
+
+            double(x) {
+                return x * this.two
+            }
+        }
+
+        let times = 0
+
+        const config = {
+            io     : true,
+            time   : true,
+            logger : log => {
+                expect(log.output).toEqual(6)
+                if (++times === 2) {
+                    setTimeout(done, 20)
+                }
+            }
+        }
+
+        const instance = new Test()
+        const instanceWithLogs = lib.applyTraces(instance, config)
+        expect(instanceWithLogs).toEqual(instance)
+        const otherInstance = new Test()
+        expect(otherInstance.double(1)).toEqual(2)
+        times++
+        expect(instanceWithLogs.double(3)).toEqual(6)
+    })
+
+    test('.wrapRequire should return a function to apply logs for require implementation,', done => {
+        const _module = {
+            double : x => x * 2
+        }
+
+        const _require = path => _module
+
+        const config = {
+            logger : log => {
+                expect(log.output).toEqual(20)
+                setTimeout(done, 20)
+            },
+            logErrors : false,
+            modules   : [
+                {
+                    io     : true,
+                    time   : true,
+                    module : _module
+                }
+            ]
+        }
+
+        const requireWrapped = lib.wrapRequire(_require, config)
+        const moduleWrapped = requireWrapped('./some/path')
+
+        expect(moduleWrapped.double(10)).toEqual(20)
+    })
+
+    test('.wrapRequire should return a function to apply logs for require implementation with specific logger,', done => {
+        const _module = {
+            double : x => x * 2
+        }
+
+        const _require = path => _module
+
+        const config = {
+            logger    : R.identity,
+            logErrors : false,
+            modules   : [
+                {
+                    io     : true,
+                    time   : true,
+                    module : _module,
+                    logger : log => {
+                        expect(log.output).toEqual(40)
+                        setTimeout(done, 20)
+                    }
+                }
+            ]
+        }
+
+        const requireWrapped = lib.wrapRequire(_require, config)
+        const moduleWrapped = requireWrapped('./some/path')
+
+        expect(moduleWrapped.double(20)).toEqual(40)
+    })
+
+    test('.wrapRequire should return a function to ignore not config modules,', () => {
+        const moduleForWrap = {
+            double : x => x * 2
+        }
+
+        const moduleWithoutLogs = {
+            double : x => x * 2
+        }
+
+        const _require = path =>
+            ({
+                withLogs    : moduleForWrap,
+                withoutLogs : moduleWithoutLogs
+            }[path])
+
+        const config = {
+            logger    : R.identity,
+            logErrors : false,
+            modules   : [
+                {
+                    io     : true,
+                    time   : true,
+                    module : moduleForWrap
+                }
+            ]
+        }
+
+        const requireWrapped = lib.wrapRequire(_require, config)
+        expect(requireWrapped('withoutLogs')).toEqual(moduleWithoutLogs)
     })
 })
