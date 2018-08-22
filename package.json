@@ -73,5 +73,10 @@
       "prettier --write",
       "git add"
     ]
+  },
+  "dependencies": {
+    "app-root-dir": "^1.0.2",
+    "is-promise": "^2.1.0",
+    "ramda": "^0.25.0"
   }
 }
