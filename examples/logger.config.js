@@ -1,6 +1,6 @@
 module.exports = {
-    logger    : log => console.log('global log', log),
-    logErrors : true,
+    logger    : log => console.log('global log', log), // global logger
+    logErrors : e => console.log('SPECIFIC LOG FOR ERRORS', e), // if is true use default global logger
     modules   : [
         {
             module : require('./modules/asyncFunction'),

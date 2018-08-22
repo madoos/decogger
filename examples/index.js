@@ -16,15 +16,17 @@ const main = async () => {
     const customNumber = new CustomNumber(2)
 
     const examples = {
-        a : double(2),
-        b : await asyncDouble(2),
-        c : await CustomNumber.asyncDouble(2),
-        d : await customNumber.asyncDoubleInstance(),
-        e : await numberUtils.asyncDouble(2),
-        f : await customString.asyncDoubleInstance(),
-        g : await deepAsyncDouble(2),
-        // np apply logs for:
-        h : await bCustomString.asyncDoubleInstance()
+        a     : double(2),
+        b     : await asyncDouble(2),
+        c     : await CustomNumber.asyncDouble(2),
+        d     : await customNumber.asyncDoubleInstance(),
+        e     : await numberUtils.asyncDouble(2),
+        f     : await customString.asyncDoubleInstance(),
+        g     : await deepAsyncDouble(2),
+        // no apply logs for:
+        h     : await bCustomString.asyncDoubleInstance(),
+        // handle all errors
+        error : new Error('error example')
     }
 
     return examples

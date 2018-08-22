@@ -13,7 +13,9 @@ const applyLogs = options => {
     )
     const { logErrors, logger } = config
 
-    if (logErrors && isFunction(logger)) {
+    if (isFunction(logErrors)) {
+        traceErrorsWith(logErrors)
+    } else if (logErrors && isFunction(logger)) {
         traceErrorsWith(logger)
     }
 
