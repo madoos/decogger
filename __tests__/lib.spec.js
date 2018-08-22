@@ -206,20 +206,23 @@ describe('Lib internal test', () => {
         const result = context.double(2)
         expect(result).toEqual(4)
     })
-    /*
-    test('.traceErrorsWith should trace new Error()', () => {
+
+    test('.traceErrorsWith should trace new Error()', done => {
         const EXPECTED_MESSAGE = 'some message'
+        let times = 0
 
         lib.traceErrorsWith(e => {
-            expect(e.message).toEqual(EXPECTED_MESSAGE)
             expect(e).toBeInstanceOf(Error)
+            if (++times === 5) {
+                done()
+            }
         })
 
         new Error(EXPECTED_MESSAGE)
         process.emit('uncaughtException', new Error(EXPECTED_MESSAGE))
         process.emit('uncaughtRejection', new Error(EXPECTED_MESSAGE))
     })
-*/
+
     test('.applyLogsForObject should apply log for each function in object without context', () => {
         const obj = {
             prop   : 'foo',
