@@ -1,7 +1,7 @@
 {
   "name": "decogger",
   "version": "1.0.0",
-  "description": "Centralizes the tracking of logs in a single point",
+  "description": "Centralizes the tracking of logs in a single point.",
   "engines": {
     "node": ">8.0.0"
   },
