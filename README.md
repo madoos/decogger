@@ -1,3 +1,5 @@
+[![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][daviddm-image]][daviddm-url] [![Coverage percentage][coveralls-image]][coveralls-url]
+
 # decogger
 
 Centralizes the tracking of logs in a single point.
@@ -348,3 +350,16 @@ const five = new CustomNumber(5)
 five.double() // apply logs
 await CustomNumber.asyncDouble(5) // apply logs
 ```
+
+## License
+
+MIT © [Maurice Domínguez](maurice.ronet.dominguez@gmail.com)
+
+[npm-image]: https://badge.fury.io/js/decogger.svg
+[npm-url]: https://npmjs.org/package/decogger
+[travis-image]: https://travis-ci.org/madoos/decogger.svg?branch=develop
+[travis-url]: https://travis-ci.org/madoos/decogger
+[daviddm-image]: https://david-dm.org/madoos/decogger.svg?theme=shields.io
+[daviddm-url]: https://david-dm.org/madoos/decogger
+[coveralls-image]: https://coveralls.io/repos/madoos/decogger/badge.svg
+[coveralls-url]: https://coveralls.io/r/madoos/decogger
