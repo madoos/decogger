@@ -1,6 +1,6 @@
 {
   "name": "decogger",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Centralizes the tracking of logs in a single point.",
   "engines": {
     "node": ">8.0.0"
@@ -57,13 +57,20 @@
     "prettier-eslint-cli": "^4.7.1",
     "supertest": "^3.1.0"
   },
-  "author": {
-    "name": "kairos DS",
-    "email": "campus-app@kairosds.com",
-    "url": "https://www.kairosds.com/"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/madoos/decogger"
   },
-  "license": "ISC",
-  "homepage": "https://www.kairosds.com/",
+  "author": {
+    "name": "Maurice Domínguez",
+    "email": "maurice.ronet.dominguez@gmail.com",
+    "url": "https://github.com/madoos"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/madoos/decogger/issues"
+  },
+  "homepage": "https://github.com/madoos/decogger#readme",
   "lint-staged": {
     "*.js": [
       "prettier-eslint --single-quote --bracket-spacing true --print-width 80 --semi --write",
