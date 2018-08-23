@@ -6,6 +6,7 @@ Centralizes the tracking of logs in a single point.
 
 - [Motivation](#motivation)
 - [Install](#install)
+- [Usage](#usage)
 - [Features](#features)
 - [How does it work](#how-does-it-work)
 - [Configuration](#configuration-options)
@@ -13,9 +14,9 @@ Centralizes the tracking of logs in a single point.
 
 ## Motivation
 
-Normally when we have to get logs to report the status of the applications we have to mess up many functions adding code logs.
+Normally when we have to get logs to report the application status we have to mess up many functions adding code logs.
 
-That makes it more difficult to test and change the dependency of the logger because we have to look for it manually in all the code.
+That makes it more difficult to test and change the logger dependency because we have to look for it manually in all the code.
 
 ```javascript
 // in user.js
@@ -113,6 +114,36 @@ To install:
 
     npm i -S decogger
 
+## Usage
+
+In logger.config.js
+
+```javascript
+module.exports = {
+  logger: console.log,
+  logErrors: true,
+  modules: [
+    {
+      module: require("./src/user"),
+      tag: "src.user",
+      time: true,
+      oi: true
+    }
+  ]
+}
+```
+
+In the entry point
+
+```javascript
+const decogger = require("decogger")
+const config = require("./logger.config")
+decogger(config)
+
+const user = require("./src/user")
+// ...
+```
+
 ## Features
 
 - [Define a global logger](#define-a-global-logger)
@@ -125,7 +156,9 @@ To install:
 
 ## How does it work
 
-- If the module is a function the function is doctorate with the log configuration
+- Must to be the first module required in main file
+- For asynchronous functions WORKS ONLY WITH PROMISES
+- If the module is a function, the function is decorate with log configuration
 - If the module is an object(POJOs) or class instance all properties that are functions are decorated
 - If the module is a constructor function all the static methods and all the props that are functions in each instance are decorated
 - if the module is a primitive data type it does not do anything
