@@ -133,7 +133,7 @@ module.exports = {
 }
 ```
 
-In the entry point
+In the entry point decogger Must be the first module required.
 
 ```javascript
 const decogger = require("decogger")
